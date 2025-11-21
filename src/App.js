@@ -3,7 +3,7 @@ import WeatherForm from "./components/WeatherForm";
 import WeatherDisplay from "./components/WeatherDisplay";
 import "./App.css";
 
-const API_KEY = "Add Your API key";
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
@@ -12,10 +12,12 @@ function App() {
   const fetchWeather = async (city) => {
     setError(null);
     setWeatherData(null);
+
     try {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
       );
+
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error("City not found. Please check the city name.");
@@ -23,6 +25,7 @@ function App() {
           throw new Error("Failed to fetch weather data.");
         }
       }
+
       const data = await response.json();
       setWeatherData(data);
     } catch (err) {
